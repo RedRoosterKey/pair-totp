@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'none'; connect-src 'none'; font-src 'none'; form-action 'none'; base-uri 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'none'; font-src 'none'; form-action 'none'; base-uri 'none'">
   <meta name="referrer" content="no-referrer">
   <meta name="description" content="Set up a shared two-factor code between two people so they can verify each other's identity.">
   <title>pair-totp</title>
@@ -21,6 +21,7 @@
 
     <!-- 1. Intro -->
     <section data-step="1">
+      <img class="hero" src="img/hero.svg" width="1200" height="720" alt="Two hands holding phones, a white iPhone and a black Android phone. Both screens show the same code, 482 913, with a green check mark between them.">
       <h2 tabindex="-1">Verify each other with a shared code</h2>
       <p>Scammers can now use AI to copy someone's voice, or even their face on a video call, from a short recording. Then they call pretending to be a family member, friend or colleague who needs help. When the voice sounds right, you need a simple check that can't be faked.</p>
       <p>pair-totp gives the two of you a shared code. Afterwards your authenticator apps show the same 6-digit code, which changes every 30 seconds. On a call, ask the other person to read you their code. If it matches yours, it's really them.</p>
