@@ -107,6 +107,13 @@
     container.appendChild(canvas);
   }
 
+  // The secret QR codes are also links, so someone running the wizard on their
+  // own phone can tap to hand the URI straight to their authenticator app.
+  function showSecretQr(link, uri) {
+    drawQr(link, uri);
+    link.setAttribute('href', uri);
+  }
+
   function clearQr(container) {
     container.querySelectorAll('canvas').forEach(function (canvas) {
       const ctx = canvas.getContext('2d');
@@ -115,6 +122,7 @@
       canvas.remove();
     });
     container.textContent = '';
+    if (container.tagName === 'A') container.removeAttribute('href');
   }
 
   function clearKey(el) {
@@ -246,10 +254,10 @@
     fillNames();
 
     if (step === 5) {
-      drawQr(els.qrA, buildUri(state.nameB));
+      showSecretQr(els.qrA, buildUri(state.nameB));
       els.keyA.textContent = formatKey(state.secretB32);
     } else if (step === 6) {
-      drawQr(els.qrB, buildUri(state.nameA));
+      showSecretQr(els.qrB, buildUri(state.nameA));
       els.keyB.textContent = formatKey(state.secretB32);
     } else if (step === 7) {
       wipeSecret();

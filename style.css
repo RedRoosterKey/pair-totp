@@ -208,6 +208,17 @@ summary:focus-visible {
   overflow: hidden;
 }
 
+a.qr:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.tap-hint {
+  color: var(--muted);
+  font-size: 0.9375rem;
+  text-align: center;
+}
+
 .qr canvas {
   display: block;
   width: 100%;

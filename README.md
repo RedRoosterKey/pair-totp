@@ -22,6 +22,8 @@ Afterwards both apps show the same 6-digit code, which changes every 30 seconds.
 
 Codes use the standard settings: SHA1, 6 digits, 30-second period. There is deliberately no option for 8 digits or 60-second periods. Not every app honours them, and a mismatch fails silently: the app accepts the code and then shows numbers that never match.
 
+If someone is running the wizard on their own phone, they can't scan their own screen, so they tap the QR code instead. It's a link to the same `otpauth://` URI, which opens their authenticator app. Ente Auth and Google Authenticator both handle these links on Android and iOS. The link is removed along with the QR code.
+
 If a phone can't scan, each QR screen can show the setup key as text with a **Copy** button. The key is cleared from the clipboard when you finish, though clipboard history apps may keep their own copy.
 
 Names may contain letters (any language), numbers, spaces, hyphens, apostrophes and full stops. Anything else is removed as you type, so a name can't break the `otpauth://` URI or show up garbled in an app.
