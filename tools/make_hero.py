@@ -6,12 +6,17 @@ also works inlined into index.html without loosening its Content-Security-Policy
 Usage, from the repository root:
     python3 tools/make_hero.py img/hero.svg           # skin tones as published
     python3 tools/make_hero.py img/hero.svg yellow    # cartoon-yellow hands
+    python3 tools/make_hero.py img/og.svg og && rsvg-convert img/og.svg -o img/og.png && rm img/og.svg
+                                                      # 1200x630 link-preview crop
 """
 import random
 import sys
 
 W, H = 1200, 720
 CODE = "482 913"
+OPTIONS = set(sys.argv[2:])
+# Link previews use 1200x630 (1.91:1), so the "og" option crops the top and bottom.
+VIEW = (0, 50, 1200, 630) if "og" in OPTIONS else (0, 0, W, H)
 
 out = []
 add = out.append
@@ -152,7 +157,7 @@ def holder(cx, cy, angle, mirror, theme, name, skin, shade, nail, sleeve, sleeve
   </g>"""
 
 
-add(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" role="img" aria-labelledby="hero-title">')
+add(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{VIEW[0]} {VIEW[1]} {VIEW[2]} {VIEW[3]}" width="{VIEW[2]}" height="{VIEW[3]}" role="img" aria-labelledby="hero-title">')
 add('<title id="hero-title">Two hands holding phones, one white and one black, both showing the same code 482 913</title>')
 add("""<defs>
   <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
@@ -193,7 +198,7 @@ add('<circle cx="600" cy="360" r="52" fill="#2fd49b"/>')
 add('<circle cx="600" cy="354" r="52" fill="#4ee6b8"/>')
 add('<path d="M576 355 L593 372 L626 337" fill="none" stroke="#0f3d34" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>')
 
-if len(sys.argv) > 2 and sys.argv[2] == "yellow":
+if "yellow" in OPTIONS:
     # Cartoon yellow for both hands, so the picture doesn't imply anyone's race.
     left_skin = right_skin = dict(skin="#fed90f", shade="#e0b000", nail="#fff0a0")
 else:
