@@ -1,0 +1,26 @@
+# Python cache, created when tools/make_steps.py imports make_hero.py
+__pycache__/
+*.py[cod]
+
+# Editors and IDEs
+.idea/
+.vscode/
+# IntelliJ "Inspect Code" exports
+*.sarif.json
+.descriptions.xml
+*.swp
+*~
+
+# Operating systems
+.DS_Store
+Thumbs.db
+
+# Claude Code's local folder
+.claude/
+
+# Temporary file from the link-preview command in tools/make_hero.py
+img/og.svg
+
+# Download from the README's npm check, if run inside the repo
+*.tgz
+package/

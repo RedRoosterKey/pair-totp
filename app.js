@@ -3,6 +3,25 @@
 (function () {
   'use strict';
 
+  // GitHub Pages can't send X-Frame-Options, and a CSP meta tag can't set
+  // frame-ancestors, so refuse to run inside another page's frame, where a
+  // fake QR code could be laid over this one.
+  if (window.top !== window.self) {
+    const main = document.querySelector('main');
+    main.textContent = '';
+    const message = document.createElement('p');
+    message.className = 'warn';
+    message.textContent = 'pair-totp won\'t run inside another page. ';
+    const link = document.createElement('a');
+    link.href = location.href;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    link.textContent = 'Open it on its own';
+    message.appendChild(link);
+    main.appendChild(message);
+    return;
+  }
+
   const TOTAL_STEPS = 7;
   const ISSUER = 'pair-totp';
   const ACCOUNT_PREFIX = 'Shared Code with ';
@@ -38,14 +57,17 @@
     if (bits > 0) {
       out += BASE32_ALPHABET[(buffer << (5 - bits)) & 31];
     }
-    buffer = 0;
     return out;
   }
 
+  // Fails closed: without the browser's secure random number generator there
+  // is no secret, rather than a weak one.
   function generateSecret() {
     wipeSecret();
-    state.secretBytes = crypto.getRandomValues(new Uint8Array(SECRET_BYTES));
+    if (!window.crypto || typeof window.crypto.getRandomValues !== 'function') return false;
+    state.secretBytes = window.crypto.getRandomValues(new Uint8Array(SECRET_BYTES));
     state.secretB32 = base32Encode(state.secretBytes);
+    return true;
   }
 
   // Key URI format: https://github.com/google/google-authenticator/wiki/Key-Uri-Format
@@ -238,6 +260,7 @@
     keyA: document.getElementById('key-a'),
     keyB: document.getElementById('key-b'),
     clipboardNote: document.getElementById('clipboard-note'),
+    noCrypto: document.getElementById('no-crypto'),
   };
 
   function fillNames() {
@@ -275,7 +298,10 @@
   }
 
   function next() {
-    if (state.step === 4) generateSecret();
+    if (state.step === 4 && !generateSecret()) {
+      els.noCrypto.hidden = false;
+      return;
+    }
     if (state.step < TOTAL_STEPS) showStep(state.step + 1);
   }
 
