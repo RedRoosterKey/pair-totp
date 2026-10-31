@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'none'; connect-src 'none'; font-src 'none'; form-action 'none'; base-uri 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="description" content="Set up a shared two-factor code between two people so they can verify each other's identity.">
+  <title>pair-totp</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <h1>pair-totp</h1>
+    <p id="progress" class="progress" aria-live="polite">Step 1 of 7</p>
+  </header>
+
+  <main class="card">
+    <noscript><p class="warn">pair-totp needs JavaScript to run.</p></noscript>
+
+    <!-- 1. Intro -->
+    <section data-step="1">
+      <h2 tabindex="-1">Verify each other with a shared code</h2>
+      <p>Scammers can now use AI to copy someone's voice, or even their face on a video call, from a short recording. Then they call pretending to be a family member, friend or colleague who needs help. When the voice sounds right, you need a simple check that can't be faked.</p>
+      <p>pair-totp gives the two of you a shared code. Afterwards your authenticator apps show the same 6-digit code, which changes every 30 seconds. On a call, ask the other person to read you their code. If it matches yours, it's really them.</p>
+      <p><strong>You'll need:</strong></p>
+      <ul>
+        <li>Both people, with this screen in front of you</li>
+        <li>An authenticator app on each phone</li>
+      </ul>
+
+      <h3>Get an authenticator app first</h3>
+      <p>We recommend <strong>Ente Auth</strong>. It's free and open source, and it works offline without an account. Already have an authenticator app? Any app that does 6-digit, 30-second codes will work.</p>
+      <p class="hint">Which do you have? On a computer, scan the code with your phone's camera. On a phone, tap the link.</p>
+      <div class="platforms" role="group" aria-label="Choose your device">
+        <button type="button" data-platform="android" aria-pressed="false">Android</button>
+        <button type="button" data-platform="iphone" aria-pressed="false">iPhone</button>
+        <button type="button" data-platform="other" aria-pressed="false">Other</button>
+      </div>
+
+      <div class="platform" data-panel="android" hidden>
+        <a class="store" href="https://play.google.com/store/apps/details?id=io.ente.auth" target="_blank" rel="noopener noreferrer">
+          <span class="store-qr" aria-hidden="true"></span>
+          <span>Ente Auth on Google Play</span>
+        </a>
+        <p class="alt">Also on <a href="https://f-droid.org/packages/io.ente.auth/" target="_blank" rel="noopener noreferrer">F-Droid</a>.</p>
+        <details class="last-resort">
+          <summary>Last resort: Google Authenticator</summary>
+          <p>It isn't open source. If you use it, choose "Use without an account" so the code stays on your phone.</p>
+          <a class="store" href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2" target="_blank" rel="noopener noreferrer">
+            <span class="store-qr" aria-hidden="true"></span>
+            <span>Google Authenticator on Google Play</span>
+          </a>
+        </details>
+      </div>
+
+      <div class="platform" data-panel="iphone" hidden>
+        <a class="store" href="https://apps.apple.com/app/id6444121398" target="_blank" rel="noopener noreferrer">
+          <span class="store-qr" aria-hidden="true"></span>
+          <span>Ente Auth on the App Store</span>
+        </a>
+        <details class="last-resort">
+          <summary>Last resort: Google Authenticator</summary>
+          <p>It isn't open source. If you use it, choose "Use without an account" so the code stays on your phone.</p>
+          <a class="store" href="https://apps.apple.com/app/id388497605" target="_blank" rel="noopener noreferrer">
+            <span class="store-qr" aria-hidden="true"></span>
+            <span>Google Authenticator on the App Store</span>
+          </a>
+        </details>
+      </div>
+
+      <div class="platform" data-panel="other" hidden>
+        <a class="store" href="https://ente.com/auth/" target="_blank" rel="noopener noreferrer">
+          <span class="store-qr" aria-hidden="true"></span>
+          <span>Ente Auth for Windows, macOS, Linux and the web</span>
+        </a>
+        <p class="alt">A desktop app can't scan a code shown on its own screen. When you get to the scan step, use "Can't scan? Show the setup key" and copy the key into the app instead.</p>
+      </div>
+
+      <p class="note">Everything happens in this browser tab. Nothing is sent over the network or saved. The app links above open the app store in a new tab.</p>
+      <div class="nav">
+        <span></span>
+        <button type="button" class="primary" data-action="next">Start</button>
+      </div>
+    </section>
+
+    <!-- 2. Person A -->
+    <section data-step="2" hidden>
+      <form id="form-a" novalidate>
+        <h2 tabindex="-1">Person A</h2>
+        <label for="name-a">Your name, as the other person will see it</label>
+        <input id="name-a" name="name-a" type="text" maxlength="40" autocomplete="off" autocapitalize="words" spellcheck="false" required aria-describedby="hint-a">
+        <p class="field-hint" id="hint-a">Letters, numbers, spaces and <kbd>-</kbd> <kbd>'</kbd> <kbd>.</kbd> only.</p>
+        <div class="nav">
+          <button type="button" class="secondary" data-action="back">Back</button>
+          <button type="submit" class="primary" id="next-a" disabled>Next</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- 3. Person B -->
+    <section data-step="3" hidden>
+      <form id="form-b" novalidate>
+        <h2 tabindex="-1">Person B</h2>
+        <label for="name-b">Your name, as the other person will see it</label>
+        <input id="name-b" name="name-b" type="text" maxlength="40" autocomplete="off" autocapitalize="words" spellcheck="false" required aria-describedby="hint-b">
+        <p class="field-hint" id="hint-b">Letters, numbers, spaces and <kbd>-</kbd> <kbd>'</kbd> <kbd>.</kbd> only.</p>
+        <div class="nav">
+          <button type="button" class="secondary" data-action="back">Back</button>
+          <button type="submit" class="primary" id="next-b" disabled>Next</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- 4. Generate -->
+    <section data-step="4" hidden>
+      <h2 tabindex="-1">Create your shared secret</h2>
+      <p>Next, this page creates a random 160-bit secret using your browser's secure random number generator.</p>
+      <p>It only ever exists in this tab. It's never saved, never put in the address bar, and never sent anywhere. It's wiped from the page once you've both scanned it.</p>
+      <p class="note">If you came back to this step after scanning, delete that pair-totp entry from your app first. A new secret will be created.</p>
+      <div class="nav">
+        <button type="button" class="secondary" data-action="back">Back</button>
+        <button type="button" class="primary" data-action="next">Create secret</button>
+      </div>
+    </section>
+
+    <!-- 5. QR for Person A -->
+    <section data-step="5" hidden>
+      <h2 tabindex="-1"><span data-name="a"></span>, scan this</h2>
+      <p>Open your authenticator app, add an account, and scan this code. It will appear as <strong>Shared Code with <span data-name="b"></span></strong>, from pair-totp.</p>
+      <div class="qr" id="qr-a" role="img" aria-label="QR code for Person A"></div>
+      <details class="manual">
+        <summary>Can't scan? Show the setup key</summary>
+        <p>In your app, choose "enter a setup key" and paste or type this key. Use time-based codes.</p>
+        <div class="key-row">
+          <code class="key" id="key-a"></code>
+          <button type="button" class="copy" data-copy="a">Copy</button>
+        </div>
+        <p class="copy-note">Paste it into your app straight away. It's cleared from the clipboard when you finish.</p>
+      </details>
+      <p>Once the account shows up in your app, press Next.</p>
+      <div class="nav">
+        <button type="button" class="secondary" data-action="back">Back</button>
+        <button type="button" class="primary" data-action="next">I've scanned it</button>
+      </div>
+    </section>
+
+    <!-- 6. QR for Person B -->
+    <section data-step="6" hidden>
+      <h2 tabindex="-1"><span data-name="b"></span>, scan this</h2>
+      <p>Hand the screen to <span data-name="b"></span>. Scan this code in your authenticator app. It will appear as <strong>Shared Code with <span data-name="a"></span></strong>, from pair-totp.</p>
+      <div class="qr" id="qr-b" role="img" aria-label="QR code for Person B"></div>
+      <details class="manual">
+        <summary>Can't scan? Show the setup key</summary>
+        <p>In your app, choose "enter a setup key" and paste or type this key. Use time-based codes.</p>
+        <div class="key-row">
+          <code class="key" id="key-b"></code>
+          <button type="button" class="copy" data-copy="b">Copy</button>
+        </div>
+        <p class="copy-note">Paste it into your app straight away. It's cleared from the clipboard when you finish.</p>
+      </details>
+      <p>Once the account shows up in your app, press Next.</p>
+      <div class="nav">
+        <button type="button" class="secondary" data-action="back">Back</button>
+        <button type="button" class="primary" data-action="next">I've scanned it</button>
+      </div>
+    </section>
+
+    <!-- 7. Done -->
+    <section data-step="7" hidden>
+      <h2 tabindex="-1">You're paired</h2>
+      <p>Both apps should now show the <strong>same 6-digit code</strong>, changing every 30 seconds. Compare them now. If they don't match, delete both entries and start over.</p>
+      <h3>How to verify each other</h3>
+      <ol>
+        <li>When the other person calls or messages you and you want to be sure it's really them, ask them to read out the current code from their "Shared Code with…" entry.</li>
+        <li>Check it against the code in your own app. <strong>Don't read yours out first.</strong></li>
+        <li>If it matches, it's them. If it doesn't, hang up and contact them another way.</li>
+        <li>For them to verify you too, wait for the next code and swap roles.</li>
+      </ol>
+      <p class="note">If a code is off by one just as it changes, wait for the next one and try again. Keep the entry private. If either phone is lost, delete the entry and run pair-totp again.</p>
+      <p class="done" id="wiped">The secret has been wiped from this page. Closing the tab clears it from the browser completely.</p>
+      <p class="done" id="clipboard-note" hidden>The copied setup key has been cleared from your clipboard.</p>
+      <div class="nav">
+        <span></span>
+        <button type="button" class="secondary" data-action="restart">Start over</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p>Runs entirely in your browser. No network requests, no storage.</p>
+  </footer>
+
+  <script src="vendor/qrcode.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
