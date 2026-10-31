@@ -18,9 +18,9 @@ pair-totp is a single static page.
 2. The page generates a 160-bit secret with `crypto.getRandomValues` and encodes it in Base32.
 3. Person A scans a QR code (`otpauth://totp/...`). It appears in their app as **Shared Code with B**, from pair-totp.
 4. That QR code is removed, and Person B scans one with the same secret, which appears as **Shared Code with A**.
-5. The secret is wiped from the page.
+5. The secret is removed from the page, as far as a web page can (see [Privacy and security](#privacy-and-security)).
 
-Do this in person. Anyone who sees a QR code can make the same codes, so don't run the wizard over a video call or screen share unless there's no other way, and don't take screenshots of it.
+Do this in person. Anyone who sees a setup QR code can make the same codes, so don't run the wizard over a video call or screen share unless there's no other way, and don't take screenshots of it.
 
 Afterwards both apps show the same 6-digit code, which changes every 30 seconds. Whoever starts a call proves who they are: they read out their current code, and the person they called checks it against their own app.
 
@@ -30,7 +30,7 @@ Codes use the standard settings: SHA1, 6 digits, 30-second period. There is deli
 
 If someone is running the wizard on their own phone, they can't scan their own screen, so they tap the QR code instead. It's a link to the same `otpauth://` URI, which opens their authenticator app. Ente Auth and Google Authenticator both handle these links on Android and iOS. The link is removed along with the QR code.
 
-If a phone can't scan, each QR screen can show the setup key as text with a **Copy** button. Use it only when scanning or tapping isn't possible. The key is cleared from the clipboard when you finish, but iPhones can share the clipboard with the owner's other Apple devices (Universal Clipboard), and some Android keyboards and clipboard apps keep a history of their own.
+If a phone can't scan, each QR screen can show the setup key as text with a **Copy** button. Use it only when scanning or tapping isn't possible. When you finish, the page tries to clear the clipboard. Browsers sometimes refuse, for example if the page isn't in focus; the last screen then says so and asks you to copy something else over the key. Even when clearing works, iPhones can share the clipboard with the owner's other Apple devices (Universal Clipboard), and some Android keyboards and clipboard apps keep a history of their own.
 
 Names may contain letters (any language), numbers, spaces, hyphens, apostrophes and full stops. Anything else is removed as you type, so a name can't break the `otpauth://` URI or show up garbled in an app.
 
@@ -49,7 +49,7 @@ Any other TOTP app works too, for example Aegis, 2FAS, FreeOTP, Bitwarden or 1Pa
 
 - **No network requests.** All code is served from this repository, including the QR library. A Content-Security-Policy in `index.html` blocks any connection, font, external script, and any image not served from this site, so the browser itself enforces this. The app store links on the intro screen are plain links that open in a new tab only if you tap them. Their QR codes are drawn locally.
 - **No storage.** The secret is never written to localStorage, sessionStorage, IndexedDB, cookies, or the URL.
-- **Wiped after use.** Each QR code is cleared from the page when you move past it. On the last screen the secret's bytes are zeroed and every reference to it is dropped. JavaScript can't overwrite strings in memory, so close the tab when you're done to clear it from the browser completely.
+- **Best-effort wipe.** Each setup QR code is cleared from the page when you move past it. On the last screen the secret's bytes are zeroed and every reference to it is dropped. That's as far as a web page can go: JavaScript can't overwrite strings, and the browser keeps its own internal copies (for drawing the QR code, the clipboard and so on) until it reuses that memory. Closing the tab is the most reliable way to release them, but even then nothing guarantees the memory is overwritten straight away, or that none of it was written to disk as swap. Recovering it would take malware or forensic access to the device.
 - **Pinned files.** `index.html` carries Subresource Integrity hashes for `app.js`, `style.css` and `vendor/qrcode.js`. Every GitHub Pages site under one account shares an origin, so without them the CSP's `'self'` would also trust scripts from the owner's other Pages sites.
 - **No HTML injection.** Names are filtered as you type and only ever inserted as text.
 - **Not in a frame.** GitHub Pages can't send `X-Frame-Options`, and a CSP set in a meta tag can't use `frame-ancestors`, so `app.js` refuses to run when the page is loaded inside another page's frame. A fake site can't wrap the real page and cover its QR code with its own.

@@ -192,19 +192,31 @@
   }
 
   // Runs from a button press, which browsers require for clipboard writes.
-  // Clipboard history apps may still keep their own copy.
+  // Clipboard history apps may still keep their own copy. If the browser
+  // refuses, keep trying at the next chance, and say so on the last screen
+  // rather than leaving the key there unannounced.
   function clearClipboard() {
     if (!keyOnClipboard) return;
     keyOnClipboard = false;
     navigator.clipboard.writeText('').then(function () {
-      if (state.step === 7) els.clipboardNote.hidden = false;
-    }, function () {});
+      if (state.step === 7) {
+        els.clipboardFailed.hidden = true;
+        els.clipboardNote.hidden = false;
+      }
+    }, function () {
+      keyOnClipboard = true;
+      if (state.step === 7) {
+        els.clipboardNote.hidden = true;
+        els.clipboardFailed.hidden = false;
+      }
+    });
   }
 
   // ---- Wiping ---------------------------------------------------------------
 
-  // JavaScript can't zero a string in place, so this drops every reference to
-  // the secret and zeroes the raw bytes. Closing the tab finishes the job.
+  // Best-effort: JavaScript can't zero a string in place, and the browser keeps
+  // its own copies, so this drops every reference to the secret and zeroes the
+  // raw bytes. Closing the tab is the most reliable way to clear the rest.
   function wipeSecret() {
     if (state.secretBytes) state.secretBytes.fill(0);
     state.secretBytes = null;
@@ -260,6 +272,7 @@
     keyA: document.getElementById('key-a'),
     keyB: document.getElementById('key-b'),
     clipboardNote: document.getElementById('clipboard-note'),
+    clipboardFailed: document.getElementById('clipboard-failed'),
     noCrypto: document.getElementById('no-crypto'),
   };
 
@@ -328,6 +341,7 @@
     els.hintA.classList.remove('rejected');
     els.hintB.classList.remove('rejected');
     els.clipboardNote.hidden = true;
+    els.clipboardFailed.hidden = true;
     showStep(1);
   }
 

@@ -13,9 +13,9 @@ Two people who trust each other set up a shared TOTP secret in person. Later, on
 
 ## What it doesn't protect against
 
-- **Someone who saw the setup.** Anyone who sees or photographs a QR code, or watches a screen share or recording of the setup, can make the same codes. Set up in person, with no one else watching.
+- **Someone who saw the setup.** Anyone who sees or photographs a setup QR code, or watches a screen share or recording of the setup, can make the same codes. Set up in person, with no one else watching.
 - **A stolen, unlocked phone.** Whoever has your authenticator app has your codes. Lock your phone, and use the app's own lock if it has one. If a phone is lost, delete the entry on the other phone and run pair-totp again.
-- **A compromised phone or browser.** Malware on either phone, or on the device running the wizard, can read the secret.
+- **A compromised phone or browser.** Malware on either phone, or on the device running the wizard, can read the secret. So can forensic analysis of the device used for setup, since browser memory can't be reliably erased.
 - **Your app's backups.** If your authenticator app backs up or syncs its entries, the secret is only as safe as that backup. Ente Auth encrypts its backups end to end. Choose "Use without an account" in Google Authenticator if you don't want it synced to Google.
 - **Coercion.** Someone forced to read out their code will.
 
@@ -23,7 +23,8 @@ Two people who trust each other set up a shared TOTP secret in person. Later, on
 
 - The secret comes from `crypto.getRandomValues` (160 bits). If that isn't available, the wizard stops instead of creating a weak secret.
 - It's never stored, never put in the URL, and never sent anywhere. The Content-Security-Policy blocks all network connections, so the browser enforces this.
-- Each QR code is removed from the page when you move on, and the secret's bytes are zeroed at the end. JavaScript can't overwrite strings in memory, so close the tab when you're done.
+- If the setup key was copied, the page tries to clear the clipboard when you finish, and says so if the browser refuses. It can't reach clipboard history kept by keyboards or other apps, or copies shared to other devices through Apple's Universal Clipboard.
+- Each setup QR code is removed from the page when you move on, and the secret's bytes are zeroed at the end. This cleanup is best-effort: JavaScript can't overwrite strings, and the browser keeps its own internal copies of page data until it reuses that memory. Closing the tab is the most reliable way to release them, but it doesn't guarantee they're overwritten immediately or were never written to swap.
 - `app.js` refuses to run inside another page's frame, since GitHub Pages can't send `X-Frame-Options`.
 - Subresource Integrity hashes pin `app.js`, `style.css` and `vendor/qrcode.js`. Every GitHub Pages site under one account shares an origin, so the CSP's `'self'` alone would also trust the owner's other Pages sites.
 - Names are filtered as you type and only ever inserted into the page as text.

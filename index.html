@@ -42,7 +42,7 @@
         <li>Both people, together in person, with this screen in front of you</li>
         <li>An authenticator app on each phone</li>
       </ul>
-      <p class="note">Don't do this over a video call or screen share unless there's no other way, and don't take screenshots. Anyone who sees the QR codes can make the same codes as you.</p>
+      <p class="note">Don't do this over a video call or screen share unless there's no other way, and don't take screenshots. Anyone who sees the setup QR codes in steps 5 and 6 can make the same codes as you. The app download codes below are safe to share.</p>
 
       <h3>Get an authenticator app first</h3>
       <p>We recommend <strong>Ente Auth</strong>. It's free and open source, and it works offline without an account. Already have an authenticator app? Any app that does 6-digit, 30-second codes will work.</p>
@@ -134,8 +134,8 @@
       <img class="hero" src="img/step-secret.svg" width="1200" height="540" alt="">
       <h2 tabindex="-1">Create your shared secret</h2>
       <p>Next, this page creates a random 160-bit secret using your browser's secure random number generator.</p>
-      <p>It only ever exists in this tab. It's never saved, never put in the address bar, and never sent anywhere. It's wiped from the page once you've both scanned it.</p>
-      <p>Anyone who sees the QR codes can make your codes too. Make sure no one else can see this screen and no one takes a screenshot. Don't share or record it unless there's no other way.</p>
+      <p>It only ever exists in this tab. It's never saved, never put in the address bar, and never sent anywhere. It's removed from the page once you've both scanned it.</p>
+      <p>Anyone who sees the setup QR codes on the next two screens can make your codes too. Make sure no one else can see this screen and no one takes a screenshot. Don't share or record it unless there's no other way.</p>
       <p class="note">If you came back to this step after scanning, delete that pair-totp entry from your app first. A new secret will be created.</p>
       <p class="hint">Extra careful? You can turn on airplane mode now. Everything this page needs is already loaded.</p>
       <p class="warn" id="no-crypto" role="alert" hidden>This browser can't create a secure random secret, so pair-totp has stopped. Try again in an up-to-date browser.</p>
@@ -159,7 +159,7 @@
           <code class="key" id="key-a"></code>
           <button type="button" class="copy" data-copy="a">Copy</button>
         </div>
-        <p class="copy-note">Only copy the key if you can't scan or tap the code, and paste it into your app straight away. It's cleared from the clipboard when you finish, but an iPhone can share its clipboard with your other Apple devices, and some keyboards keep a clipboard history.</p>
+        <p class="copy-note">Only copy the key if you can't scan or tap the code, and paste it into your app straight away. We'll try to clear it from the clipboard when you finish, but an iPhone can share its clipboard with your other Apple devices, and some keyboards keep a clipboard history.</p>
       </details>
       <p>Once the account shows up in your app, press Next.</p>
       <div class="nav">
@@ -182,7 +182,7 @@
           <code class="key" id="key-b"></code>
           <button type="button" class="copy" data-copy="b">Copy</button>
         </div>
-        <p class="copy-note">Only copy the key if you can't scan or tap the code, and paste it into your app straight away. It's cleared from the clipboard when you finish, but an iPhone can share its clipboard with your other Apple devices, and some keyboards keep a clipboard history.</p>
+        <p class="copy-note">Only copy the key if you can't scan or tap the code, and paste it into your app straight away. We'll try to clear it from the clipboard when you finish, but an iPhone can share its clipboard with your other Apple devices, and some keyboards keep a clipboard history.</p>
       </details>
       <p>Once the account shows up in your app, press Next.</p>
       <div class="nav">
@@ -205,8 +205,9 @@
         <li>If they want to check it's you, hang up and call them back on the number you already have for them. Then you read your code.</li>
       </ol>
       <p class="note">If a code is off by one just as it changes, wait for the next one and try again. Keep the entry private. If either phone is lost, delete the entry and run pair-totp again.</p>
-      <p class="done" id="wiped">The secret has been wiped from this page. Closing the tab clears it from the browser completely.</p>
+      <p class="done" id="wiped">The secret has been wiped from this page. Close this tab if you are done.</p>
       <p class="done" id="clipboard-note" hidden>The copied setup key has been cleared from your clipboard.</p>
+      <p class="warn" id="clipboard-failed" role="alert" hidden>Couldn't clear your clipboard. Copy something else to replace the setup key.</p>
       <div class="nav">
         <span></span>
         <button type="button" class="secondary" data-action="restart">Start over</button>
@@ -219,6 +220,6 @@
   </footer>
 
   <script src="vendor/qrcode.js" integrity="sha384-8FWZA6BGMXhsfO+BLtrJK0We6gg5o1JyO8xQm6peWDEUs17ACA5ziE/NIAkl9z2k"></script>
-  <script src="app.js" integrity="sha384-hHw/+qgXob4pNrH1oPjSx67ZPADncg713evhlf+I9qtOUX9z4k/sbqdJGsUAkEyC"></script>
+  <script src="app.js" integrity="sha384-AwD8CuT6NgbFUGBqgYGImuNscmV5GxtziISJynQlq+7ZhKtjCY/roqZiVKI+4ok1"></script>
 </body>
 </html>
