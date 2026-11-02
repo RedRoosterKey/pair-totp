@@ -20,7 +20,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <title>pair-totp</title>
   <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="style.css" integrity="sha384-AIdD9mk9166Wveul8LGsiFkmcTfytHxyTXGkBc4to7TNgyBUG6wIzUz7W+xPZf+h">
+  <link rel="stylesheet" href="style.css" integrity="sha384-q02lGDaIMZV0uXxqt/kPGc3/FcD2M/UmWPzvJUH8v5kxfX2qjc2j+ZXqKohvfLwS">
 </head>
 <body>
   <header class="top">
@@ -153,6 +153,12 @@
       <a class="qr" id="qr-a" aria-label="QR code. On this phone, tap to add it to your authenticator app."></a>
       <p class="tap-hint">Using this phone? Tap the code to add it to your app.</p>
       <details class="manual">
+        <summary>Code opened in the wrong app?</summary>
+        <p><strong>iPhone:</strong> go to Settings › General › AutoFill &amp; Passwords › Set Up Codes In, and choose your authenticator app. Then come back and tap the code again.</p>
+        <p><strong>Android:</strong> if your phone asks which app to use, choose your authenticator app. If it opened the wrong app without asking, go to Settings › Apps, find that app, open "Open by default" and clear its defaults. The names can differ from phone to phone.</p>
+        <p>If the account was added to the wrong app, delete it there.</p>
+      </details>
+      <details class="manual">
         <summary>Can't scan? Show the setup key</summary>
         <p>In your app, choose "enter a setup key" and paste or type this key. Use time-based codes.</p>
         <div class="key-row">
@@ -175,6 +181,12 @@
       <p>Hand the screen to <span data-name="b"></span>. Scan the code below in your authenticator app. It will appear as <strong>Shared Code with <span data-name="a"></span></strong>, from pair-totp.</p>
       <a class="qr" id="qr-b" aria-label="QR code. On this phone, tap to add it to your authenticator app."></a>
       <p class="tap-hint">Using this phone? Tap the code to add it to your app.</p>
+      <details class="manual">
+        <summary>Code opened in the wrong app?</summary>
+        <p><strong>iPhone:</strong> go to Settings › General › AutoFill &amp; Passwords › Set Up Codes In, and choose your authenticator app. Then come back and tap the code again.</p>
+        <p><strong>Android:</strong> if your phone asks which app to use, choose your authenticator app. If it opened the wrong app without asking, go to Settings › Apps, find that app, open "Open by default" and clear its defaults. The names can differ from phone to phone.</p>
+        <p>If the account was added to the wrong app, delete it there.</p>
+      </details>
       <details class="manual">
         <summary>Can't scan? Show the setup key</summary>
         <p>In your app, choose "enter a setup key" and paste or type this key. Use time-based codes.</p>
@@ -208,8 +220,9 @@
       <p class="done" id="wiped">The secret has been wiped from this page. Close this tab if you are done.</p>
       <p class="done" id="clipboard-note" hidden>The copied setup key has been cleared from your clipboard.</p>
       <p class="warn" id="clipboard-failed" role="alert" hidden>Couldn't clear your clipboard. Copy something else to replace the setup key.</p>
+      <p class="hint">Names right but the scan didn't work? Start over with the same names and a fresh secret. Delete the old pair-totp entries from your apps first.</p>
       <div class="nav">
-        <span></span>
+        <button type="button" class="secondary" data-action="redo">Start over with <span data-name="a"></span> and <span data-name="b"></span></button>
         <button type="button" class="secondary" data-action="restart">Start over</button>
       </div>
     </section>
@@ -220,6 +233,6 @@
   </footer>
 
   <script src="vendor/qrcode.js" integrity="sha384-8FWZA6BGMXhsfO+BLtrJK0We6gg5o1JyO8xQm6peWDEUs17ACA5ziE/NIAkl9z2k"></script>
-  <script src="app.js" integrity="sha384-AwD8CuT6NgbFUGBqgYGImuNscmV5GxtziISJynQlq+7ZhKtjCY/roqZiVKI+4ok1"></script>
+  <script src="app.js" integrity="sha384-cu8EPVSm0EUJaxW91dVWZt/2aCCUvrNqmnuFVNr3U+cDgsAcWpIDWvn+ZJW7bt7r"></script>
 </body>
 </html>

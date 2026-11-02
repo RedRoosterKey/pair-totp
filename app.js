@@ -330,6 +330,19 @@
     if (state.step > 1) showStep(state.step - 1);
   }
 
+  function resetClipboardNotes() {
+    els.clipboardNote.hidden = true;
+    els.clipboardFailed.hidden = true;
+  }
+
+  // Keeps the names and goes back to the screen that makes a new secret, for
+  // when the names were right but a scan went wrong.
+  function redo() {
+    wipeSecret();
+    resetClipboardNotes();
+    showStep(4);
+  }
+
   function restart() {
     wipeSecret();
     state.nameA = '';
@@ -340,8 +353,7 @@
     els.nextB.disabled = true;
     els.hintA.classList.remove('rejected');
     els.hintB.classList.remove('rejected');
-    els.clipboardNote.hidden = true;
-    els.clipboardFailed.hidden = true;
+    resetClipboardNotes();
     showStep(1);
   }
 
@@ -386,6 +398,7 @@
     const action = button.dataset.action;
     if (action === 'next') next();
     else if (action === 'back') back();
+    else if (action === 'redo') redo();
     else if (action === 'restart') restart();
   });
 
